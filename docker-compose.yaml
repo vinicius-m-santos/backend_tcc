@@ -1,0 +1,41 @@
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+        volumes:
+            - .:/var/www/html:cached # source code
+            - vendor_data:/var/www/html/vendor # vendor packages in a separate volume
+            - var_data:/var/www/html/var # cache/logs
+        ports:
+            - "9000:9000"
+        depends_on:
+            - db
+
+    web:
+        image: nginx:alpine
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www/html:cached
+            - ./docker/nginx:/etc/nginx/conf.d
+        depends_on:
+            - php
+
+    db:
+        image: postgres:15
+        environment:
+            POSTGRES_DB: symfony
+            POSTGRES_USER: symfony
+            POSTGRES_PASSWORD: symfony
+        ports:
+            - "5432:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+volumes:
+    vendor_data:
+    var_data:
+    pgdata:

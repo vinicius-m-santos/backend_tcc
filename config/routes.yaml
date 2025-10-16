@@ -1,0 +1,10 @@
+api_login_check:
+    path: /api/login_check
+# gesdinet_jwt_refresh_token:
+#     resource: "@GesdinetJWTRefreshTokenBundle/Resources/config/routes.yaml"
+#     prefix: /api/token
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
